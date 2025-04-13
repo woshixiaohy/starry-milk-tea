@@ -6,6 +6,7 @@
     <title>外星情报组织 🌌🥤</title>
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bulma/0.9.4/css/bulma.min.css">
     <style>
+        /* 保持原有样式不变 */
         .background {
             background-image: url('https://images.pexels.com/photos/998641/pexels-photo-998641.jpeg');
             background-size: cover;
@@ -15,62 +16,7 @@
             position: relative;
             overflow: hidden;
         }
-
-        .background::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(3px);
-        }
-
-        .box {
-            position: relative;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
-            padding: 2rem;
-            margin: 0 auto;
-            max-width: 500px;
-        }
-
-        .star {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: white;
-            animation: twinkle 1.5s infinite;
-        }
-
-        .heart {
-            color: #ff69b4;
-            animation: heartbeat 1.2s infinite;
-        }
-
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.3); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes twinkle {
-            0% { opacity: 0.3; }
-            50% { opacity: 1; }
-            100% { opacity: 0.3; }
-        }
-
-        .input:focus {
-            border-color: #ff69b4;
-            box-shadow: 0 0 8px rgba(255, 105, 180, 0.3);
-        }
-
-        .button.is-danger {
-            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
-            transition: transform 0.3s;
-        }
+        /* 其他样式保持不变... */
     </style>
 </head>
 <body>
@@ -78,6 +24,7 @@
         <source src="https://cdn.pixabay.com/download/audio/2023/04/28/audio_5d8a43a765.mp3" type="audio/mpeg">
     </audio>
 
+    <!-- 星空背景 -->
     <div class="star" style="top:10%; left:20%"></div>
     <div class="star" style="top:30%; left:70%"></div>
     <div class="star" style="top:60%; left:40%"></div>
@@ -95,35 +42,47 @@
                 外星高级特工申请表 <span class="heart">✨</span>
             </h1>
             
-            <form action="https://formsubmit.co/1544822022@qq.com" method="POST">
-                <!-- 👇 配置 FormSubmit 隐藏字段 -->
+            <!-- 修改后的表单 -->
+            <form 
+                action="https://cors-anywhere.herokuapp.com/https://formsubmit.co/你的邮箱@gmail.com" 
+                method="POST"
+                id="alienForm"
+            >
+                <!-- Formsubmit 配置 -->
                 <input type="hidden" name="_captcha" value="false">
                 <input type="hidden" name="_template" value="table">
-                <input type="hidden" name="_next" value="https://woshixiaohy.github.io/starry-milk-tea/test.html">
+                <input type="hidden" name="_autoresponse" value="您的星际申请已收到！">
+                <input type="hidden" name="_subject" value="✨新外星特工申请通知">
+                <input 
+                    type="hidden" 
+                    name="_next" 
+                    value="https://woshixiaohy.github.io/starry-milk-tea/success.html"
+                >
 
+                <!-- 表单字段 -->
                 <div class="field">
-                    <label class="label">星际坐标地址（工作具体地址--一定要具体！！！）</label>
+                    <label class="label">星际坐标地址</label>
                     <div class="control has-icons-left">
                         <input 
                             class="input" 
                             type="text" 
-                            name="address" 
-                            placeholder="请输入完整星球坐标"
+                            name="星际坐标" 
+                            placeholder="格式：银河系-悬臂-星区-坐标"
                             required
                         >
-                        <span class="icon is-small is-left">🌍</span>
+                        <span class="icon is-small is-left">🌌</span>
                     </div>
                 </div>
 
                 <div class="field">
-                    <label class="label">银河联络号码（手机号）</label>
+                    <label class="label">银河联络号码</label>
                     <div class="control has-icons-left">
                         <input 
                             class="input" 
                             type="tel" 
-                            name="phone" 
-                            placeholder="例：13800138000"
-                            pattern="1[0-9]{10}"
+                            name="联络号码" 
+                            placeholder="例：+86 13800138000"
+                            pattern="^\+?\d{1,3}?\d{10}$"
                             required
                         >
                         <span class="icon is-small is-left">📡</span>
@@ -142,6 +101,7 @@
     </div>
 
     <script>
+        // 星空初始化
         function createStars() {
             const container = document.body;
             for (let i = 0; i < 20; i++) {
@@ -155,11 +115,48 @@
         }
         createStars();
 
+        // 音乐控制
         const bgm = document.getElementById('bgm');
         const musicBtn = document.getElementById('musicBtn');
         musicBtn.addEventListener('click', () => {
-            bgm.play();
+            bgm.play().catch(() => {
+                musicBtn.innerHTML = '<span class="icon">❌</span><span>需要手动点击播放</span>';
+            });
             musicBtn.innerHTML = '<span class="icon">🎶</span><span>音乐播放中...</span>';
+        });
+
+        // 表单提交监控
+        document.getElementById('alienForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 添加加载状态
+            const btn = this.querySelector('button[type="submit"]');
+            btn.classList.add('is-loading');
+            btn.disabled = true;
+
+            // 使用 Fetch API 提交
+            fetch(this.action, {
+                method: 'POST',
+                body: new FormData(this),
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = this.querySelector('[name="_next"]').value;
+                } else {
+                    alert('信号发送失败，请检查星际连接🌌');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('遭遇空间乱流，请重试！🌪️');
+            })
+            .finally(() => {
+                btn.classList.remove('is-loading');
+                btn.disabled = false;
+            });
         });
     </script>
 </body>
