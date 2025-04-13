@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星空奶茶特供站 🌌🥤</title>
+    <!-- 国内加速版Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bulma/0.9.4/css/bulma.min.css">
+    <style>
+        /* 星空背景样式 */
+        .background {
+            background-image: url('https://images.pexels.com/photos/998641/pexels-photo-998641.jpeg');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 半透明遮罩层 */
+        .background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(3px);
+        }
+
+        /* 表单容器 */
+        .box {
+            position: relative;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+            padding: 2rem;
+            margin: 0 auto;
+            max-width: 500px;
+        }
+
+        /* 动态星星效果 */
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            animation: twinkle 1.5s infinite;
+        }
+
+        /* 心跳动画 */
+        .heart {
+            color: #ff69b4;
+            animation: heartbeat 1.2s infinite;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
+        }
+
+        /* 输入框特效 */
+        .input:focus {
+            border-color: #ff69b4;
+            box-shadow: 0 0 8px rgba(255, 105, 180, 0.3);
+        }
+
+        /* 渐变按钮 */
+        .button.is-danger {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            transition: transform 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景音乐 -->
+    <audio id="bgm" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2023/04/28/audio_5d8a43a765.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- 动态星星 -->
+    <div class="star" style="top:10%; left:20%"></div>
+    <div class="star" style="top:30%; left:70%"></div>
+    <div class="star" style="top:60%; left:40%"></div>
+
+    <div class="background">
+        <div class="box">
+            <!-- 音乐控制按钮 -->
+            <div class="has-text-centered mb-4">
+                <button id="musicBtn" class="button is-small is-rounded is-danger">
+                    <span class="icon">🎵</span>
+                    <span>点击开启星空音乐</span>
+                </button>
+            </div>
+
+            <h1 class="title has-text-centered has-text-weight-bold" style="color: #ff69b4;">
+                外星高级特工申请表 <span class="heart">✨</span>
+            </h1>
+            
+            <!-- 表单开始 -->
+            <form action="https://formsubmit.co/your-email@example.com" method="POST" id="form">
+                <input type="hidden" name="_next" value="https://your-thankyou-page.com">
+                <input type="hidden" name="_captcha" value="false">
+
+                <div class="field">
+                    <label class="label">星际坐标地址（工作具体地址--一定要具体！！！）</label>
+                    <div class="control has-icons-left">
+                        <input 
+                            class="input" 
+                            type="text" 
+                            name="address" 
+                            placeholder="请输入完整星球坐标"
+                            required
+                        >
+                        <span class="icon is-small is-left">🌍</span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">银河联络号码（手机号）</label>
+                    <div class="control has-icons-left">
+                        <input 
+                            class="input" 
+                            type="tel" 
+                            name="phone" 
+                            placeholder="例：13800138000"
+                            pattern="1[0-9]{10}"
+                            required
+                        >
+                        <span class="icon is-small is-left">📡</span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-danger is-fullwidth is-medium" type="submit">
+                            发送神秘信号🚀
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 自动生成星星
+        function createStars() {
+            const container = document.body;
+            for (let i = 0; i < 20; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 1.5 + 's';
+                container.appendChild(star);
+            }
+        }
+        createStars();
+
+        // 音乐控制
+        const bgm = document.getElementById('bgm');
+        const musicBtn = document.getElementById('musicBtn');
+        musicBtn.addEventListener('click', () => {
+            bgm.play();
+            musicBtn.innerHTML = '<span class="icon">🎶</span><span>音乐播放中...</span>';
+        });
+
+        // 表单提交处理
+        document.getElementById('form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const button = e.target.querySelector('button');
+            button.classList.add('is-loading');
+            
+            try {
+                const response = await fetch(e.target.action, {
+                    method: 'POST',
+                    body: new FormData(e.target),
+                });
+
+                if (response.ok) {
+                    alert('🚀 神秘信号已发送');
+                    e.target.reset();
+                } else {
+                    alert('⚠️ 星际信号干扰，请重试');
+                }
+            } catch (error) {
+                alert('🌠 遭遇宇宙射线风暴，请检查网络');
+            } finally {
+                button.classList.remove('is-loading');
+            }
+        });
+    </script>
+</body>
+</html>
